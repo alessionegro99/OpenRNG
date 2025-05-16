@@ -24,7 +24,7 @@ int main(int argc, char **argv) {
   }
 
   long i, N_circ, n_trials, tid;
-  unsigned long seed_t, seed[NTHREADS];
+  unsigned long seed[NTHREADS];
   double pi, x, y, r, err, elapsed;
 
   struct timespec start, end;
@@ -46,14 +46,14 @@ int main(int argc, char **argv) {
   // task 2: use mersenne twister for a proper evaluation
   clock_gettime(CLOCK_MONOTONIC, &start);
 
-#pragma omp parallel num_threads(NTHREADS) private(x, y, seed_t)
+#pragma omp parallel num_threads(NTHREADS) private(x, y, tid)
   {
+    
     tid = omp_get_thread_num();
-    seed_t = seed[tid];
 #pragma omp for reduction(+ : N_circ)
     for (i = 0; i < n_trials; i++) {
-      x = rand_double_sym_mlcg(&seed_t, r);
-      y = rand_double_sym_mlcg(&seed_t, r);
+      x = rand_double_sym_mlcg(&seed[tid], r);
+      y = rand_double_sym_mlcg(&seed[tid], r);
       if (x * x + y * y <= r * r)
         N_circ += 1;
     }

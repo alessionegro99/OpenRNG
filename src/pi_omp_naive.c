@@ -36,9 +36,6 @@ int main(int argc, char **argv) {
 
   r = 1.0; // radius of circle. Side of square is 2*r
 
-  // add parallel init for seed thread dependent
-  // create a thread dependent thread local seed variable
-
   // task 2: use mersenne twister for a proper evaluation
   clock_gettime(CLOCK_MONOTONIC, &start);
 
